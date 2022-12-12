@@ -1,6 +1,7 @@
-import { FlexpaConfig } from "../src/flexpa_types";
+import { FlexpaConfig } from "../src/flexpaTypes";
 import { useEffect, useState } from "react";
 import { getAccessToken } from "../src/requests";
+import Layout from "../components/Layout";
 
 declare const FlexpaLink: {
   create: (config: FlexpaConfig) => Record<string, unknown>;
@@ -17,7 +18,7 @@ export default function Home() {
         onSuccess: async (publicToken) => {
           const at = await getAccessToken(`${publicToken}`);
           setAccessToken(at);
-          console.log(at);
+          console.log(accessToken);
         },
       });
       FlexpaLink.open();
@@ -28,8 +29,9 @@ export default function Home() {
 
   return (
     <>
-      <script src="https://js.flexpa.com/v1/" async={true} />
-      {/* <Button onClick={() => FlexpaLink.open()}>Link your health data</Button> */}
+      <div className="h-screen flex flex-row justify-start">
+        <script src="https://js.flexpa.com/v1/" async={true} key="asdf" />
+      </div>
     </>
   );
 }
