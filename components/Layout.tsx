@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useMemo } from "react";
 
-const Layout = ({children}: {children: React.ReactNode}) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   const menuItems = [
     {
       id: 1,
@@ -14,6 +14,41 @@ const Layout = ({children}: {children: React.ReactNode}) => {
       id: 2,
       href: "/api/fhir/careTeam",
       title: "Care Team",
+    },
+    {
+      id: 3,
+      href: "/api/fhir/conditions",
+      title: "Conditions",
+    },
+    {
+      id: 4,
+      href: "/api/fhir/coverage",
+      title: "Cooverage",
+    },
+    {
+      id: 5,
+      href: "/api/fhir/diagnosticReports",
+      title: "Diagnostic Reports",
+    },
+    {
+      id: 6,
+      href: "/api/fhir/encounters",
+      title: "Encounters",
+    },
+    {
+      id: 7,
+      href: "/api/fhir/explanationOfBenefits",
+      title: "Explanation Of Benefits",
+    },
+    {
+      id: 8,
+      href: "/api/fhir/observations",
+      title: "Observations",
+    },
+    {
+      id: 9,
+      href: "/api/fhir/procedures",
+      title: "Procedures",
     },
   ];
   const [toggleCollapse, setToggleCollapse] = useState(false);
@@ -61,18 +96,18 @@ const Layout = ({children}: {children: React.ReactNode}) => {
     <div className="h-screen flex flex-row justify-start">
       <div className="bg-primary flex-1 p-4 text-white">
         <div className="min-h-screen flex flex-col">
-          <header className="bg-purple-200 sticky top-0 h-14 flex justify-center items-center font-semibold uppercase">
-            Next.js sidebar menu
+          <header className="bg-blue-500 sticky top-0 h-14 flex justify-center items-center font-semibold uppercase">
+            Your digital health app
           </header>
           <div className="flex flex-col md:flex-row flex-1">
-            <aside className="bg-fuchsia-100 w-full md:w-60">
+            <aside className="bg-blue-100 w-full md:w-60">
               <nav>
                 <ul>
                   {menuItems.map(({ href, title }) => (
                     <li className="m-2" key={title}>
                       <Link
                         href={href}
-                        className={`flex p-2 bg-fuchsia-200 rounded hover:bg-fuchsia-400 cursor-pointer`}
+                        className={`flex p-2 bg-blue-500 rounded hover:bg-blue-700 cursor-pointer`}
                       >
                         {title}
                       </Link>

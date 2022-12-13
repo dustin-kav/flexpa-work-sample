@@ -1,7 +1,6 @@
 import { FlexpaConfig } from "../src/flexpaTypes";
 import { useEffect, useState } from "react";
 import { getAccessToken } from "../src/requests";
-import Layout from "../components/Layout";
 
 declare const FlexpaLink: {
   create: (config: FlexpaConfig) => Record<string, unknown>;
