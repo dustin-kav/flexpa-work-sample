@@ -1,8 +1,24 @@
-export default function DiagnosticReports() {
+import React, { useEffect, useState } from "react";
+import { getDiagnosticReports } from "../../src/requests";
+
+export default function Home() {
+  const [fhirJson, setFhirJson] = useState<object>();
+  useEffect(() => {
+    try {
+      const windowAccessToken = window.localStorage.getItem("accessToken");
+      const windowPatientId = window.localStorage.getItem("patientId");
+      getDiagnosticReports(`${windowPatientId}`, `${windowAccessToken}`).then(
+        (json) => setFhirJson(json)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   return (
-    <div className="flex h-full flex-col justify-center items-center">
-      <h1 className="text-4xl mb-5 font-bold">Contact</h1>
-      <span className="text-7xl">📞</span>
-    </div>
+    <>
+      <div className="h-screen flex flex-row justify-start">
+        {fhirJson && <>{JSON.stringify(fhirJson, null, 2)}</>}
+      </div>
+    </>
   );
 }

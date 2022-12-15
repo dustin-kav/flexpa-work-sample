@@ -1,45 +1,27 @@
-// // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
- import type { NextApiRequest, NextApiResponse } from "next";
+import React, { useEffect, useState } from "react";
+import { getExplanationOfBenefits } from "../../src/requests";
 
-// export const getPatientId = async (at: string): Promise<string | undefined> => {
-//   const response = await fetch("/api/link/introspect", {
-//     method: "POST",
-//     headers: {
-//       "Access-Token": at,
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   const data = await response.json();
-//   const regex = new RegExp("([^/]+$)");
-//   const patientId = data.data.sub && data.data.sub.match(regex)[0];
-//   // console.log({ patientId })
-//   return patientId;
-// };
-
-// export default function explanationOfBenefits({ explanationOfBenefits }) {
-
-export default function explanationOfBenefits() {
-  console.log('im in here');
-
+export default function Home() {
+  const [fhirJson, setFhirJson] = useState<object>();
+  useEffect(() => {
+    try {
+      const windowAccessToken = window.localStorage.getItem("accessToken");
+      const windowPatientId = window.localStorage.getItem("patientId");
+      getExplanationOfBenefits(
+        `${windowPatientId}`,
+        `${windowAccessToken}`
+      ).then((json) => {
+        setFhirJson(json);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   return (
-    <div>
-      hey
-    </div>
-  )
-  // Render posts...
+    <>
+      <div className="h-screen flex flex-row justify-start">
+        {fhirJson && <>{JSON.stringify(fhirJson, null, 2)}</>}
+      </div>
+    </>
+  );
 }
-
-// // This function gets called at build time
-// export async function getStaticProps() {
-//   // Call an external API endpoint to get posts
-//   const res = await fetch('https://.../posts')
-//   const explanationOfBenefits = await res.json()
-
-//   // By returning { props: { posts } }, the Blog component
-//   // will receive `posts` as a prop at build time
-//   return {
-//     props: {
-//       explanationOfBenefits,
-//     },
-//   }
-// }

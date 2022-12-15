@@ -1,45 +1,48 @@
 // // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
- import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-// export const getPatientId = async (at: string): Promise<string | undefined> => {
-//   const response = await fetch("/api/link/introspect", {
-//     method: "POST",
-//     headers: {
-//       "Access-Token": at,
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   const data = await response.json();
-//   const regex = new RegExp("([^/]+$)");
-//   const patientId = data.data.sub && data.data.sub.match(regex)[0];
-//   // console.log({ patientId })
-//   return patientId;
-// };
+type Data = {
+  data: string;
+};
 
 // export default function explanationOfBenefits({ explanationOfBenefits }) {
 
-export default function explanationOfBenefits() {
-  console.log('im in here');
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
+  if (req.method !== "GET") {
+    res.status(400).json({ data: "Invalid request method" });
+    return;
+  }
+  const accessToken = req.headers["access-token"] as string;
 
-  return (
-    <div>
-      hey
-    </div>
-  )
-  // Render posts...
+  const patientId = req.query.patient;
+
+  // Make request to Flexpa API endpoint
+  const requestUrl = `https://api.flexpa.com/fhir/ExplanationOfBenefit?patient=${patientId}`;
+  const flexpaResponse = await fetch(requestUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  res.status(flexpaResponse.status);
+
+  if (flexpaResponse.status !== 200) {
+    // Error from Flexpa API
+    res.json({ data: flexpaResponse.statusText });
+  } else {
+    // Success from Flexpa API
+    try {
+      const d = await flexpaResponse.json();
+
+      // Success parsing JSON
+      res.json({ data: await d });
+    } catch {
+      // Error parsing JSON
+      res.json({ data: "Malformed JSON in API response" });
+    }
+  }
 }
-
-// // This function gets called at build time
-// export async function getStaticProps() {
-//   // Call an external API endpoint to get posts
-//   const res = await fetch('https://.../posts')
-//   const explanationOfBenefits = await res.json()
-
-//   // By returning { props: { posts } }, the Blog component
-//   // will receive `posts` as a prop at build time
-//   return {
-//     props: {
-//       explanationOfBenefits,
-//     },
-//   }
-// }
