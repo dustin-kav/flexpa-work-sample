@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getExplanationOfBenefits } from "../../src/requests";
 
 export default function Home() {
-  const [fhirJson, setFhirJson] = useState<object>();
+  interface response {
+    meta: object;
+    entry: unknown[];
+  }
+  const [fhirJson, setFhirJson] = useState<response>();
   useEffect(() => {
     try {
       const windowAccessToken = window.localStorage.getItem("accessToken");
@@ -11,7 +15,7 @@ export default function Home() {
         `${windowPatientId}`,
         `${windowAccessToken}`
       ).then((json) => {
-        setFhirJson(json);
+        setFhirJson(json as response);
       });
     } catch (error) {
       console.log(error);
@@ -19,8 +23,8 @@ export default function Home() {
   }, []);
   return (
     <>
-      <div className="h-screen flex flex-row justify-start">
-        {fhirJson && <>{JSON.stringify(fhirJson, null, 2)}</>}
+      <div>
+        <pre>{fhirJson && JSON.stringify(fhirJson.entry, null, 2)}</pre>
       </div>
     </>
   );
