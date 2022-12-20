@@ -34,4 +34,5 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 
-SECRET_KEY and PUBLIC_KEY
+NEXT_PUBLIC_SECRET_KEY and NEXT_PUBLIC_PUBLIC_KEY need to be set as environment variables
+These keys can be obtained from flexpa's developer portal
