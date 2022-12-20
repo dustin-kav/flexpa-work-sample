@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getProcedures } from "../../src/requests";
 
 export default function Home() {
   interface response {
@@ -7,14 +6,22 @@ export default function Home() {
     entry: unknown[];
   }
   const [fhirJson, setFhirJson] = useState<response>();
-
+  const getProcedures = async (patientId: string, accessToken: string) => {
+    const response = await fetch(`/api/fhir/conditions?patient=${patientId}`, {
+      method: "GET",
+      headers: {
+        "Access-Token": `${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    setFhirJson(data.data);
+  };
   useEffect(() => {
     try {
       const windowAccessToken = window.localStorage.getItem("accessToken");
       const windowPatientId = window.localStorage.getItem("patientId");
-      getProcedures(`${windowPatientId}`, `${windowAccessToken}`).then((json) =>
-        setFhirJson(json as response)
-      );
+      getProcedures(`${windowPatientId}`, `${windowAccessToken}`);
     } catch (error) {
       console.log(error);
     }
