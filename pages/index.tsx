@@ -30,6 +30,7 @@ export default function Home() {
             });
           },
         });
+        FlexpaLink.open();
       }
     } catch (error) {
       console.log(error);
@@ -41,9 +42,6 @@ export default function Home() {
         {(!accessToken || !patientId) && (
           <>
             <script src="https://js.flexpa.com/v1/" async={true} key="asdf" />
-            <button onClick={() => {
-              FlexpaLink.open();
-            }}>Click to link patient data!</button>
           </>
         )}
         {accessToken && <>{`hello, patientId: ${patientId}`}</>}
